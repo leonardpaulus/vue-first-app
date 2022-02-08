@@ -1,6 +1,7 @@
 <template>
   <section>
     <header><h1>My Friends</h1></header>
+    <new-friend @post-friend="addFriendToFriends"></new-friend>
     <ul>
       <friend-contact
         v-for="friend in friends"
@@ -45,6 +46,9 @@ export default {
         (friend) => friend.id === friendId
       );
       identifiedFriend.isFavorite = !identifiedFriend.isFavorite;
+    },
+    addFriendToFriends(friend) {
+      this.friends.push(friend);
     },
   },
 };
@@ -98,7 +102,8 @@ header {
   margin: 0 0 1rem 0;
 }
 
-#app button {
+#app button,
+.button {
   font: inherit;
   cursor: pointer;
   border: 1px solid #ff0077;
