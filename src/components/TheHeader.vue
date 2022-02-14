@@ -1,21 +1,22 @@
 <template>
-  <header>
-    <h1>More on Vue Components</h1>
-  </header>
+  <div><h1>RememberMe</h1></div>
 </template>
 
-<style scoped>
-header {
-  width: 100%;
-  height: 5rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #14005e;
-}
+<script>
+export default {};
+</script>
 
-header h1 {
+<style scoped>
+h1 {
+  text-align: center;
   color: white;
   margin: 0;
+}
+div {
+  background-color: darkred;
+  height: 15vh;
+  width: 100vw;
+  display: grid;
+  place-items: center;
 }
 </style>
