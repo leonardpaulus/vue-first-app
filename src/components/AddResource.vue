@@ -9,7 +9,7 @@
       <input type="url" v-model="resource.link" />
       <input type="submit" value="Add Resource" class="addResourceButton" />
     </form>
-    <error-alert v-if="inputIsInvalid">
+    <error-alert v-if="inputIsInvalid" @close-dialog="onChangeInputIsInvalid">
       <header>
         <h2>Invalid Input</h2>
       </header>

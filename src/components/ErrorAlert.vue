@@ -1,5 +1,5 @@
 <template>
-  <div></div>
+  <div @click="$emit('close-dialog')"></div>
   <dialog open>
     <slot></slot>
   </dialog>
