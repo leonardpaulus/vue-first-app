@@ -1,58 +1,63 @@
 <template>
-  <section>
-    <header><h1>My Friends</h1></header>
-    <new-friend @post-friend="addFriendToFriends"></new-friend>
-    <ul>
-      <friend-contact
-        v-for="friend in friends"
-        :key="friend.id"
-        :id="friend.id"
-        :name="friend.name"
-        :phone-number="friend.phone"
-        :email-adress="friend.email"
-        :is-favorite="friend.isFavorite"
-        @toggle-favorite="toggleFavoriteStatus"
-        @delete-friend="deleteFriend"
-      ></friend-contact>
-    </ul>
-  </section>
+  <router-view v-slot="slotProps">
+    <transition name="fade-button" mode="out-in">
+      <component :is="slotProps.Component"></component>
+    </transition>
+  </router-view>
 </template>
 
 <script>
 export default {
   data() {
     return {
-      detailsAreVisible: false,
-      friends: [
-        {
-          id: "manuel",
-          name: "Manuel Lorenz",
-          phone: "12312412341",
-          email: "manuel@localhost.com",
-          isFavorite: true,
-        },
-        {
-          id: "julie",
-          name: "Julie Jones",
-          phone: "8932419123",
-          email: "julie@localhost.com",
-          isFavorite: false,
-        },
-      ],
+      dialogIsVisible: false,
+      animatedBlock: false,
+      paraIsVisible: false,
+      usersAreVisible: false,
     };
   },
   methods: {
-    toggleFavoriteStatus(friendId) {
-      const identifiedFriend = this.friends.find(
-        (friend) => friend.id === friendId
-      );
-      identifiedFriend.isFavorite = !identifiedFriend.isFavorite;
+    showDialog() {
+      this.dialogIsVisible = true;
     },
-    addFriendToFriends(friend) {
-      this.friends.push(friend);
+    hideDialog() {
+      this.dialogIsVisible = false;
     },
-    deleteFriend(friendId) {
-      this.friends = this.friends.filter((friend) => friend.id !== friendId);
+    animateBlock() {
+      this.animatedBlock = true;
+    },
+    toggleParagraph() {
+      this.paraIsVisible = !this.paraIsVisible;
+    },
+    showUsers() {
+      this.usersAreVisible = true;
+    },
+    hideUsers() {
+      this.usersAreVisible = false;
+    },
+    beforeEnter(el) {
+      console.log("beforeEnter");
+      console.log(el);
+      el.style.opacity = 0;
+    },
+    beforeLeave(el) {
+      console.log("beforeLeave");
+      console.log(el);
+    },
+    enter(el, done) {
+      console.log(el);
+      let round = 1;
+      const interval = setInterval(function () {
+        el.style.opacity = round * 0.01;
+        round++;
+        if (round > 100) {
+          clearInterval(interval);
+          done();
+        }
+      }, 20);
+    },
+    afterEnter(el) {
+      console.log(el);
     },
   },
 };
@@ -62,69 +67,87 @@ export default {
 * {
   box-sizing: border-box;
 }
-
 html {
-  font-family: "Jost", sans-serif;
+  font-family: sans-serif;
 }
-
 body {
   margin: 0;
 }
-
-header {
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
-  margin: 3rem auto;
-  border-radius: 10px;
-  padding: 1rem;
-  background-color: #58004d;
-  color: white;
-  text-align: center;
-  width: 90%;
-  max-width: 40rem;
-}
-
-#app ul {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-#app li {
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
-  margin: 1rem auto;
-  border-radius: 10px;
-  padding: 1rem;
-  text-align: center;
-  width: 90%;
-  max-width: 40rem;
-}
-
-#app h2 {
-  font-size: 2rem;
-  border-bottom: 4px solid #ccc;
-  color: #58004d;
-  margin: 0 0 1rem 0;
-}
-
-#app button,
-.button {
+button {
   font: inherit;
-  cursor: pointer;
-  border: 1px solid #ff0077;
-  background-color: #ff0077;
+  padding: 0.5rem 2rem;
+  border: 1px solid #810032;
+  border-radius: 30px;
+  background-color: #810032;
   color: white;
-  padding: 0.05rem 1rem;
-  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.26);
+  cursor: pointer;
+}
+button:hover,
+button:active {
+  background-color: #a80b48;
+  border-color: #a80b48;
+}
+.block {
+  width: 8rem;
+  height: 8rem;
+  background-color: #290033;
+  margin-bottom: 2rem;
+}
+.container {
+  max-width: 40rem;
+  margin: 2rem auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding: 2rem;
+  border: 2px solid #ccc;
+  border-radius: 12px;
+}
+.animate {
+  animation: slide-fade 1s ease-in-out forwards;
 }
 
-#app button:hover,
-#app button:active {
-  background-color: #ec3169;
-  border-color: #ec3169;
-  box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.26);
+.fade-button-enter-from {
+  opacity: 0;
 }
-.buttons {
-  display: flex;
-  justify-content: space-evenly;
+.fade-button-leave-from {
+  opacity: 1;
+}
+.fade-button-enter-active {
+  transition: opacity 0.3s ease-out;
+}
+.fade-button-leave-active {
+  transition: opacity 0.3s ease-in;
+}
+.fade-button-enter-to {
+  opacity: 1;
+}
+.fade-button-leave-to {
+  opacity: 0;
+}
+
+.route-enter-from {
+}
+.route-enter-active {
+  animation: slide-scale 0.4s ease-out;
+}
+.route-enter-to {
+}
+
+.route-leave-active {
+  animation: slide-scale 0.4s ease-in;
+}
+
+@keyframes slide-scale {
+  0% {
+    transform: translateX(0) scale(1);
+  }
+  70% {
+    transform: translateX(-120px) scale(1.1);
+  }
+  100% {
+    transform: translateX(-150px) scale(1);
+  }
 }
 </style>
